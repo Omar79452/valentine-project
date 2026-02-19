@@ -18,8 +18,9 @@
     }
 
     html { width: 100%; height: 100%; }
+
     body {
-      position: relative;
+      position: relative;        /* containing block for the absolute No button */
       width: 100%;
       height: 100vh;
       overflow: hidden;
@@ -137,6 +138,7 @@
       animation: fadeIn .5s ease both;
     }
     .yes-screen.active { display: flex; }
+
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
     .yes-screen .big-heart {
@@ -186,20 +188,18 @@
       position: fixed;
       inset: 0;
       z-index: 200;
-      background: rgba(0, 0, 0, 0.75);
+      background: rgba(0,0,0,.75);
       align-items: center;
       justify-content: center;
       animation: fadeIn .35s ease both;
     }
-    .video-overlay.active {
-      display: flex;
-    }
+    .video-overlay.active { display: flex; }
 
     .video-popup {
       position: relative;
       background: white;
       border-radius: 24px;
-      padding: 1.2rem;
+      padding: 1.4rem;
       box-shadow: 0 20px 60px rgba(0,0,0,.4);
       max-width: 90vw;
       max-height: 90vh;
@@ -265,12 +265,12 @@
     <p class="yes-sub">I knew you'd say yes! You just made my day.</p>
   </div>
 
-  <!-- Video popup (shown after 4 No attempts) -->
+  <!-- Video popup shown after 4 No attempts -->
   <div class="video-overlay" id="videoOverlay">
     <div class="video-popup">
-      <p>Really?? 😤💔 Watch this first…</p>
-      <video id="popupVideo" autoplay controls playsinline>
-        <source src="reaction.mp4" type="video/mp4" />
+      <p>Stop meesing with me! 😡</p>
+      <video id="popupVideo" muted autoplay playsinline loop>
+        <source src="WhatsApp Video 2026-02-19 at 10.39.07 PM.mp4" type="video/mp4" />
       </video>
       <br />
       <button class="close-btn" id="closeVideo">OK fine 😅</button>
@@ -304,22 +304,28 @@
     function handleNo() {
       noCount++;
 
-      // After 4 attempts show the video
       if (noCount >= 4) {
+        // Show video popup and autoplay
         videoOverlay.classList.add('active');
+        popupVideo.muted = true;   // required by browsers for autoplay to work
         popupVideo.play();
         return;
       }
 
-      // Otherwise dodge around the page (your original logic)
-      const x = Math.random() * (window.innerWidth  - noBtn.offsetWidth);
-      const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+      // Dodge: position:absolute, body is the 100vh containing block
+      // Subtract button size so it never goes out of bounds
+      const maxX = window.innerWidth  - noBtn.offsetWidth;
+      const maxY = window.innerHeight - noBtn.offsetHeight;
+      const x = Math.random() * maxX;
+      const y = Math.random() * maxY;
+
       noBtn.style.position = 'absolute';
       noBtn.style.left = x + 'px';
       noBtn.style.top  = y + 'px';
     }
 
-    noBtn.addEventListener('mouseover', handleNo);
+    // mouseenter fires ONCE per hover — not on every mouse-move pixel like mouseover
+    noBtn.addEventListener('mouseenter', handleNo);
     noBtn.addEventListener('touchstart', function (e) {
       e.preventDefault();
       handleNo();
@@ -330,8 +336,7 @@
       videoOverlay.classList.remove('active');
       popupVideo.pause();
       popupVideo.currentTime = 0;
-      // Reset No counter so button keeps dodging if they still try
-      noCount = 0;
+      noCount = 0; // reset so button keeps dodging if they still try
     });
 
     /* ── Yes button ── */
@@ -357,8 +362,8 @@
       const dist  = 80 + Math.random() * 140;
       el.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
       el.style.setProperty('--dy', Math.sin(angle) * dist + 'px');
-      el.style.left         = cx + 'px';
-      el.style.top          = cy + 'px';
+      el.style.left           = cx + 'px';
+      el.style.top            = cy + 'px';
       el.style.animationDelay = Math.random() * .2 + 's';
       document.body.appendChild(el);
       el.addEventListener('animationend', () => el.remove());
