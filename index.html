@@ -9,20 +9,20 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --rose:    #e8385a;
-      --blush:   #fde8ed;
-      --cream:   #fff7f9;
-      --petal:   #f6b8c6;
-      --deep:    #7a1c34;
-      --gold:    #d4a0a0;
+      --rose:  #e8385a;
+      --blush: #fde8ed;
+      --cream: #fff7f9;
+      --petal: #f6b8c6;
+      --deep:  #7a1c34;
+      --gold:  #d4a0a0;
     }
 
-    html, body {
-      width: 100%; height: 100%;
-      overflow: hidden;
-    }
-
+    html { width: 100%; height: 100%; }
     body {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
       background: var(--cream);
       font-family: 'Lora', Georgia, serif;
       display: flex;
@@ -30,19 +30,16 @@
       justify-content: center;
     }
 
-    /* ── Petals background ── */
-    .petals {
-      position: fixed; inset: 0; pointer-events: none; z-index: 0;
-    }
+    /* ── Petals ── */
+    .petals { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
     .petal {
       position: absolute;
       top: -60px;
-      font-size: clamp(14px, 2.5vw, 26px);
       animation: fall linear infinite;
       opacity: 0;
     }
     @keyframes fall {
-      0%   { transform: translateY(0) rotate(0deg);   opacity: 0; }
+      0%   { transform: translateY(0) rotate(0deg);       opacity: 0; }
       5%   { opacity: 0.7; }
       95%  { opacity: 0.5; }
       100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
@@ -56,9 +53,7 @@
       border-radius: 32px;
       padding: clamp(2rem, 7vw, 5rem) clamp(2rem, 8vw, 6rem);
       text-align: center;
-      box-shadow:
-        0 8px 40px rgba(232,56,90,.12),
-        0 2px 8px rgba(232,56,90,.08);
+      box-shadow: 0 8px 40px rgba(232,56,90,.12), 0 2px 8px rgba(232,56,90,.08);
       max-width: 520px;
       width: 90vw;
       animation: cardIn .7s cubic-bezier(.22,1,.36,1) both;
@@ -111,41 +106,24 @@
       font-size: clamp(.9rem, 2.5vw, 1.05rem);
       font-weight: 600;
       letter-spacing: .03em;
-      transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
-      position: relative;
-      overflow: hidden;
     }
-    .btn::after {
-      content: '';
-      position: absolute; inset: 0;
-      background: rgba(255,255,255,.18);
-      opacity: 0;
-      transition: opacity .18s;
-    }
-    .btn:hover::after { opacity: 1; }
 
     .btn-yes {
       background: var(--rose);
       color: white;
       box-shadow: 0 4px 18px rgba(232,56,90,.35);
+      transition: transform .18s ease, box-shadow .18s ease;
     }
     .btn-yes:hover {
       transform: scale(1.06) translateY(-2px);
       box-shadow: 0 8px 28px rgba(232,56,90,.45);
     }
-    .btn-yes:active { transform: scale(.97); }
 
     .btn-no {
       background: var(--blush);
       color: var(--deep);
       box-shadow: 0 2px 8px rgba(0,0,0,.06);
     }
-    .btn-no.floating {
-      position: fixed;
-      z-index: 999;
-      transition: top .25s cubic-bezier(.22,1,.36,1), left .25s cubic-bezier(.22,1,.36,1);
-    }
-    .btn-no:hover { transform: scale(1.04); }
 
     /* ── Yes screen ── */
     .yes-screen {
@@ -189,7 +167,7 @@
       to   { opacity: 1; transform: none; }
     }
 
-    /* confetti hearts burst */
+    /* ── Confetti ── */
     .confetti-heart {
       position: fixed;
       pointer-events: none;
@@ -201,14 +179,75 @@
       0%   { opacity: 1; transform: translate(0,0) scale(1); }
       100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.3); }
     }
+
+    /* ── Video Popup Overlay ── */
+    .video-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(0, 0, 0, 0.75);
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn .35s ease both;
+    }
+    .video-overlay.active {
+      display: flex;
+    }
+
+    .video-popup {
+      position: relative;
+      background: white;
+      border-radius: 24px;
+      padding: 1.2rem;
+      box-shadow: 0 20px 60px rgba(0,0,0,.4);
+      max-width: 90vw;
+      max-height: 90vh;
+      animation: popIn .4s cubic-bezier(.22,1,.36,1) both;
+      text-align: center;
+    }
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(.8) translateY(30px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    .video-popup p {
+      font-family: 'Playfair Display', serif;
+      color: var(--deep);
+      font-size: clamp(1rem, 3vw, 1.4rem);
+      margin-bottom: .9rem;
+    }
+
+    .video-popup video {
+      display: block;
+      width: 100%;
+      max-width: 420px;
+      max-height: 60vh;
+      border-radius: 14px;
+      object-fit: contain;
+    }
+
+    .close-btn {
+      margin-top: .9rem;
+      display: inline-block;
+      background: var(--rose);
+      color: white;
+      border: none;
+      border-radius: 100px;
+      padding: .55rem 1.8rem;
+      font-family: 'Lora', serif;
+      font-size: .95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform .15s ease;
+    }
+    .close-btn:hover { transform: scale(1.05); }
   </style>
 </head>
 <body>
 
-  <!-- Floating petals -->
   <div class="petals" id="petals"></div>
 
-  <!-- Main card -->
   <div class="card" id="mainCard">
     <span class="heart-icon">💌</span>
     <h1>Will you be my Valentine?</h1>
@@ -224,6 +263,18 @@
     <span class="big-heart">❤️</span>
     <div class="yes-msg">Yaaay ❤️🥰</div>
     <p class="yes-sub">I knew you'd say yes! You just made my day.</p>
+  </div>
+
+  <!-- Video popup (shown after 4 No attempts) -->
+  <div class="video-overlay" id="videoOverlay">
+    <div class="video-popup">
+      <p>Really?? 😤💔 Watch this first…</p>
+      <video id="popupVideo" autoplay controls playsinline>
+        <source src="reaction.mp4" type="video/mp4" />
+      </video>
+      <br />
+      <button class="close-btn" id="closeVideo">OK fine 😅</button>
+    </div>
   </div>
 
   <script>
@@ -243,44 +294,51 @@
       petalsEl.appendChild(p);
     }
 
-    /* ── No button dodge ── */
-    const btnNo = document.getElementById('btnNo');
-    let floating = false;
+    /* ── No button ── */
+    const noBtn        = document.getElementById('btnNo');
+    const videoOverlay = document.getElementById('videoOverlay');
+    const popupVideo   = document.getElementById('popupVideo');
+    const closeVideo   = document.getElementById('closeVideo');
+    let noCount = 0;
 
-    function dodge() {
-      if (!floating) {
-        // Convert to fixed position first
-        const r = btnNo.getBoundingClientRect();
-        btnNo.classList.add('floating');
-        btnNo.style.top  = r.top  + 'px';
-        btnNo.style.left = r.left + 'px';
-        btnNo.style.width = r.width + 'px';
-        floating = true;
-        // Small delay so the initial position is painted, then move
-        setTimeout(moveRandom, 20);
+    function handleNo() {
+      noCount++;
+
+      // After 4 attempts show the video
+      if (noCount >= 4) {
+        videoOverlay.classList.add('active');
+        popupVideo.play();
         return;
       }
-      moveRandom();
+
+      // Otherwise dodge around the page (your original logic)
+      const x = Math.random() * (window.innerWidth  - noBtn.offsetWidth);
+      const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+      noBtn.style.position = 'absolute';
+      noBtn.style.left = x + 'px';
+      noBtn.style.top  = y + 'px';
     }
 
-    function moveRandom() {
-      const bw = btnNo.offsetWidth;
-      const bh = btnNo.offsetHeight;
-      const maxX = window.innerWidth  - bw  - 16;
-      const maxY = window.innerHeight - bh  - 16;
-      btnNo.style.left = Math.max(8, Math.random() * maxX) + 'px';
-      btnNo.style.top  = Math.max(8, Math.random() * maxY) + 'px';
-    }
+    noBtn.addEventListener('mouseover', handleNo);
+    noBtn.addEventListener('touchstart', function (e) {
+      e.preventDefault();
+      handleNo();
+    }, { passive: false });
 
-    btnNo.addEventListener('mouseenter', dodge);
-    btnNo.addEventListener('touchstart', (e) => { e.preventDefault(); dodge(); }, { passive: false });
+    /* ── Close video popup ── */
+    closeVideo.addEventListener('click', () => {
+      videoOverlay.classList.remove('active');
+      popupVideo.pause();
+      popupVideo.currentTime = 0;
+      // Reset No counter so button keeps dodging if they still try
+      noCount = 0;
+    });
 
     /* ── Yes button ── */
-    const btnYes = document.getElementById('btnYes');
+    const btnYes    = document.getElementById('btnYes');
     const yesScreen = document.getElementById('yesScreen');
 
     btnYes.addEventListener('click', () => {
-      // Confetti burst
       for (let i = 0; i < 24; i++) spawnConfetti(btnYes);
       setTimeout(() => {
         yesScreen.classList.add('active');
@@ -289,18 +347,18 @@
     });
 
     function spawnConfetti(origin) {
-      const r = origin.getBoundingClientRect();
-      const cx = r.left + r.width / 2;
+      const r  = origin.getBoundingClientRect();
+      const cx = r.left + r.width  / 2;
       const cy = r.top  + r.height / 2;
       const el = document.createElement('div');
-      el.className = 'confetti-heart';
+      el.className   = 'confetti-heart';
       el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
       const angle = Math.random() * Math.PI * 2;
       const dist  = 80 + Math.random() * 140;
       el.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
       el.style.setProperty('--dy', Math.sin(angle) * dist + 'px');
-      el.style.left = cx + 'px';
-      el.style.top  = cy + 'px';
+      el.style.left         = cx + 'px';
+      el.style.top          = cy + 'px';
       el.style.animationDelay = Math.random() * .2 + 's';
       document.body.appendChild(el);
       el.addEventListener('animationend', () => el.remove());
