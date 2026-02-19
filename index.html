@@ -8,6 +8,7 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+
     :root {
       --rose:  #e8385a;
       --blush: #fde8ed;
@@ -17,7 +18,9 @@
       --gold:  #d4a0a0;
     }
 
+
     html { width: 100%; height: 100%; }
+
 
     body {
       position: relative;
@@ -30,6 +33,7 @@
       align-items: center;
       justify-content: center;
     }
+
 
     /* ── Petals ── */
     .petals { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
@@ -45,6 +49,7 @@
       95%  { opacity: 0.5; }
       100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
     }
+
 
     /* ── Card ── */
     .card {
@@ -64,6 +69,7 @@
       to   { opacity: 1; transform: none; }
     }
 
+
     .heart-icon {
       font-size: clamp(2.5rem, 8vw, 4.5rem);
       display: block;
@@ -74,6 +80,7 @@
       0%,100% { transform: scale(1);    }
       50%      { transform: scale(1.15); }
     }
+
 
     h1 {
       font-family: 'Playfair Display', Georgia, serif;
@@ -90,6 +97,7 @@
       letter-spacing: .02em;
     }
 
+
     /* ── Buttons ── */
     .btns {
       display: flex;
@@ -97,6 +105,7 @@
       justify-content: center;
       flex-wrap: wrap;
     }
+
 
     .btn {
       cursor: pointer;
@@ -109,6 +118,7 @@
       letter-spacing: .03em;
     }
 
+
     .btn-yes {
       background: var(--rose);
       color: white;
@@ -120,11 +130,13 @@
       box-shadow: 0 8px 28px rgba(232,56,90,.45);
     }
 
+
     .btn-no {
       background: var(--blush);
       color: var(--deep);
       box-shadow: 0 2px 8px rgba(0,0,0,.06);
     }
+
 
     /* ── Yes screen ── */
     .yes-screen {
@@ -139,7 +151,9 @@
     }
     .yes-screen.active { display: flex; }
 
+
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
 
     .yes-screen .big-heart {
       font-size: clamp(3.5rem, 12vw, 7rem);
@@ -149,6 +163,7 @@
       from { transform: scale(0) rotate(-15deg); opacity: 0; }
       to   { transform: scale(1) rotate(0deg);   opacity: 1; }
     }
+
 
     .yes-msg {
       font-family: 'Playfair Display', serif;
@@ -169,6 +184,7 @@
       to   { opacity: 1; transform: none; }
     }
 
+
     /* ── Confetti ── */
     .confetti-heart {
       position: fixed;
@@ -182,6 +198,7 @@
       100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.3); }
     }
 
+
     /* ── Video Popup ── */
     .video-overlay {
       display: none;
@@ -194,6 +211,7 @@
       animation: fadeIn .35s ease both;
     }
     .video-overlay.active { display: flex; }
+
 
     .video-popup {
       position: relative;
@@ -211,12 +229,14 @@
       to   { opacity: 1; transform: none; }
     }
 
+
     .video-popup p {
       font-family: 'Playfair Display', serif;
       color: var(--deep);
       font-size: clamp(1rem, 3vw, 1.4rem);
       margin-bottom: .9rem;
     }
+
 
     .video-popup video {
       display: block;
@@ -226,6 +246,7 @@
       border-radius: 14px;
       object-fit: contain;
     }
+
 
     .close-btn {
       margin-top: .9rem;
@@ -246,7 +267,9 @@
 </head>
 <body>
 
+
   <div class="petals" id="petals"></div>
+
 
   <div class="card" id="mainCard">
     <span class="heart-icon">💌</span>
@@ -258,11 +281,13 @@
     </div>
   </div>
 
+
   <div class="yes-screen" id="yesScreen">
     <span class="big-heart">❤️</span>
     <div class="yes-msg">Yaaay ❤️🥰</div>
     <p class="yes-sub">I knew you'd say yes! You just made my day.</p>
   </div>
+
 
   <div class="video-overlay" id="videoOverlay">
     <div class="video-popup">
@@ -274,6 +299,7 @@
       <button class="close-btn" id="closeVideo">OK fine 😅</button>
     </div>
   </div>
+
 
   <script>
     /* ── Petals ── */
@@ -292,6 +318,7 @@
       petalsEl.appendChild(p);
     }
 
+
     /* ── No button ── */
     const noBtn        = document.getElementById('btnNo');
     const videoOverlay = document.getElementById('videoOverlay');
@@ -299,16 +326,13 @@
     const closeVideo   = document.getElementById('closeVideo');
     let noCount = 0;
 
-    // ✅ THE FIX: read width & height RIGHT NOW at page load,
-    // while the button is still sitting in normal document flow.
-    // After the first hover it becomes position:absolute and
-    // offsetWidth/offsetHeight can return 0 — so we NEVER read
-    // them again inside handleNo().
     const BTN_W = noBtn.offsetWidth;
     const BTN_H = noBtn.offsetHeight;
 
+
     function handleNo() {
       noCount++;
+
 
       if (noCount >= 4) {
         videoOverlay.classList.add('active');
@@ -317,20 +341,24 @@
         return;
       }
 
+
       // Safe random position — button fully inside the viewport every time
       const x = Math.random() * (window.innerWidth  - BTN_W);
       const y = Math.random() * (window.innerHeight - BTN_H);
 
-      noBtn.style.position = 'absolute';
+
+      noBtn.style.position = 'fixed'; // ✅ fixed instead of absolute
       noBtn.style.left = x + 'px';
       noBtn.style.top  = y + 'px';
     }
+
 
     noBtn.addEventListener('mouseenter', handleNo);
     noBtn.addEventListener('touchstart', function(e) {
       e.preventDefault();
       handleNo();
     }, { passive: false });
+
 
     /* ── Close video ── */
     closeVideo.addEventListener('click', () => {
@@ -340,9 +368,11 @@
       noCount = 0;
     });
 
+
     /* ── Yes button ── */
     const btnYes    = document.getElementById('btnYes');
     const yesScreen = document.getElementById('yesScreen');
+
 
     btnYes.addEventListener('click', () => {
       for (let i = 0; i < 24; i++) spawnConfetti(btnYes);
@@ -351,6 +381,7 @@
         document.getElementById('petals').style.zIndex = 51;
       }, 300);
     });
+
 
     function spawnConfetti(origin) {
       const r  = origin.getBoundingClientRect();
