@@ -20,7 +20,7 @@
     html { width: 100%; height: 100%; }
 
     body {
-      position: relative;        /* containing block for the absolute No button */
+      position: relative;
       width: 100%;
       height: 100vh;
       overflow: hidden;
@@ -182,7 +182,7 @@
       100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.3); }
     }
 
-    /* ── Video Popup Overlay ── */
+    /* ── Video Popup ── */
     .video-overlay {
       display: none;
       position: fixed;
@@ -258,17 +258,15 @@
     </div>
   </div>
 
-  <!-- Yes screen -->
   <div class="yes-screen" id="yesScreen">
     <span class="big-heart">❤️</span>
     <div class="yes-msg">Yaaay ❤️🥰</div>
     <p class="yes-sub">I knew you'd say yes! You just made my day.</p>
   </div>
 
-  <!-- Video popup shown after 4 No attempts -->
   <div class="video-overlay" id="videoOverlay">
     <div class="video-popup">
-      <p>Stop meesing with me! 😡</p>
+      <p>Stop messing with me! 😡</p>
       <video id="popupVideo" muted autoplay playsinline loop>
         <source src="reaction.mp4" type="video/mp4" />
       </video>
@@ -301,42 +299,45 @@
     const closeVideo   = document.getElementById('closeVideo');
     let noCount = 0;
 
+    // ✅ THE FIX: read width & height RIGHT NOW at page load,
+    // while the button is still sitting in normal document flow.
+    // After the first hover it becomes position:absolute and
+    // offsetWidth/offsetHeight can return 0 — so we NEVER read
+    // them again inside handleNo().
+    const BTN_W = noBtn.offsetWidth;
+    const BTN_H = noBtn.offsetHeight;
+
     function handleNo() {
       noCount++;
 
       if (noCount >= 4) {
-        // Show video popup and autoplay
         videoOverlay.classList.add('active');
-        popupVideo.muted = true;   // required by browsers for autoplay to work
+        popupVideo.muted = true;
         popupVideo.play();
         return;
       }
 
-      // Dodge: position:absolute, body is the 100vh containing block
-      // Subtract button size so it never goes out of bounds
-      const maxX = window.innerWidth  - noBtn.offsetWidth;
-      const maxY = window.innerHeight - noBtn.offsetHeight;
-      const x = Math.random() * maxX;
-      const y = Math.random() * maxY;
+      // Safe random position — button fully inside the viewport every time
+      const x = Math.random() * (window.innerWidth  - BTN_W);
+      const y = Math.random() * (window.innerHeight - BTN_H);
 
       noBtn.style.position = 'absolute';
       noBtn.style.left = x + 'px';
       noBtn.style.top  = y + 'px';
     }
 
-    // mouseenter fires ONCE per hover — not on every mouse-move pixel like mouseover
     noBtn.addEventListener('mouseenter', handleNo);
-    noBtn.addEventListener('touchstart', function (e) {
+    noBtn.addEventListener('touchstart', function(e) {
       e.preventDefault();
       handleNo();
     }, { passive: false });
 
-    /* ── Close video popup ── */
+    /* ── Close video ── */
     closeVideo.addEventListener('click', () => {
       videoOverlay.classList.remove('active');
       popupVideo.pause();
       popupVideo.currentTime = 0;
-      noCount = 0; // reset so button keeps dodging if they still try
+      noCount = 0;
     });
 
     /* ── Yes button ── */
