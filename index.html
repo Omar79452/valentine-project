@@ -8,7 +8,6 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-
     :root {
       --rose:  #e8385a;
       --blush: #fde8ed;
@@ -18,9 +17,7 @@
       --gold:  #d4a0a0;
     }
 
-
     html { width: 100%; height: 100%; }
-
 
     body {
       position: relative;
@@ -34,8 +31,6 @@
       justify-content: center;
     }
 
-
-    /* ── Petals ── */
     .petals { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
     .petal {
       position: absolute;
@@ -44,14 +39,12 @@
       opacity: 0;
     }
     @keyframes fall {
-      0%   { transform: translateY(0) rotate(0deg);       opacity: 0; }
+      0%   { transform: translateY(0) rotate(0deg); opacity: 0; }
       5%   { opacity: 0.7; }
       95%  { opacity: 0.5; }
       100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
     }
 
-
-    /* ── Card ── */
     .card {
       position: relative; z-index: 1;
       background: white;
@@ -69,7 +62,6 @@
       to   { opacity: 1; transform: none; }
     }
 
-
     .heart-icon {
       font-size: clamp(2.5rem, 8vw, 4.5rem);
       display: block;
@@ -77,10 +69,9 @@
       animation: pulse 1.6s ease-in-out infinite;
     }
     @keyframes pulse {
-      0%,100% { transform: scale(1);    }
-      50%      { transform: scale(1.15); }
+      0%,100% { transform: scale(1); }
+      50% { transform: scale(1.15); }
     }
-
 
     h1 {
       font-family: 'Playfair Display', Georgia, serif;
@@ -97,15 +88,12 @@
       letter-spacing: .02em;
     }
 
-
-    /* ── Buttons ── */
     .btns {
       display: flex;
       gap: 1.1rem;
       justify-content: center;
       flex-wrap: wrap;
     }
-
 
     .btn {
       cursor: pointer;
@@ -118,7 +106,6 @@
       letter-spacing: .03em;
     }
 
-
     .btn-yes {
       background: var(--rose);
       color: white;
@@ -130,15 +117,12 @@
       box-shadow: 0 8px 28px rgba(232,56,90,.45);
     }
 
-
     .btn-no {
       background: var(--blush);
       color: var(--deep);
       box-shadow: 0 2px 8px rgba(0,0,0,.06);
     }
 
-
-    /* ── Yes screen ── */
     .yes-screen {
       display: none;
       position: fixed; inset: 0;
@@ -151,9 +135,7 @@
     }
     .yes-screen.active { display: flex; }
 
-
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
 
     .yes-screen .big-heart {
       font-size: clamp(3.5rem, 12vw, 7rem);
@@ -161,9 +143,8 @@
     }
     @keyframes heartBoom {
       from { transform: scale(0) rotate(-15deg); opacity: 0; }
-      to   { transform: scale(1) rotate(0deg);   opacity: 1; }
+      to { transform: scale(1) rotate(0deg); opacity: 1; }
     }
-
 
     .yes-msg {
       font-family: 'Playfair Display', serif;
@@ -181,11 +162,9 @@
     }
     @keyframes slideUp {
       from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: none; }
+      to { opacity: 1; transform: none; }
     }
 
-
-    /* ── Confetti ── */
     .confetti-heart {
       position: fixed;
       pointer-events: none;
@@ -194,12 +173,10 @@
       animation: burst 1s ease-out forwards;
     }
     @keyframes burst {
-      0%   { opacity: 1; transform: translate(0,0) scale(1); }
+      0% { opacity: 1; transform: translate(0,0) scale(1); }
       100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.3); }
     }
 
-
-    /* ── Video Popup ── */
     .video-overlay {
       display: none;
       position: fixed;
@@ -211,7 +188,6 @@
       animation: fadeIn .35s ease both;
     }
     .video-overlay.active { display: flex; }
-
 
     .video-popup {
       position: relative;
@@ -226,9 +202,8 @@
     }
     @keyframes popIn {
       from { opacity: 0; transform: scale(.8) translateY(30px); }
-      to   { opacity: 1; transform: none; }
+      to { opacity: 1; transform: none; }
     }
-
 
     .video-popup p {
       font-family: 'Playfair Display', serif;
@@ -236,7 +211,6 @@
       font-size: clamp(1rem, 3vw, 1.4rem);
       margin-bottom: .9rem;
     }
-
 
     .video-popup video {
       display: block;
@@ -246,7 +220,6 @@
       border-radius: 14px;
       object-fit: contain;
     }
-
 
     .close-btn {
       margin-top: .9rem;
@@ -267,139 +240,127 @@
 </head>
 <body>
 
+<div class="petals" id="petals"></div>
 
-  <div class="petals" id="petals"></div>
-
-
-  <div class="card" id="mainCard">
-    <span class="heart-icon">💌</span>
-    <h1>Will you be my Valentine? Maloktyyy🥺</h1>
-    <p class="subtitle">A question from the heart…</p>
-    <div class="btns">
-      <button class="btn btn-yes" id="btnYes">Yes 💖</button>
-      <button class="btn btn-no" id="btnNo">No 🙈</button>
-    </div>
+<div class="card" id="mainCard">
+  <span class="heart-icon">💌</span>
+  <h1>Will you be my Valentine? Maloktyyy🥺</h1>
+  <p class="subtitle">A question from the heart…</p>
+  <div class="btns">
+    <button class="btn btn-yes" id="btnYes">Yes 💖</button>
+    <button class="btn btn-no" id="btnNo">No 🙈</button>
   </div>
+</div>
 
+<div class="yes-screen" id="yesScreen">
+  <span class="big-heart">❤️</span>
+  <div class="yes-msg">Yaaay ❤️🥰</div>
+  <p class="yes-sub">I knew you'd say yes! You just made my day.</p>
+</div>
 
-  <div class="yes-screen" id="yesScreen">
-    <span class="big-heart">❤️</span>
-    <div class="yes-msg">Yaaay ❤️🥰</div>
-    <p class="yes-sub">I knew you'd say yes! You just made my day.</p>
+<div class="video-overlay" id="videoOverlay">
+  <div class="video-popup">
+    <p>Stop messing with me! 😡</p>
+    <video id="popupVideo" muted autoplay playsinline loop>
+      <source src="reaction.mp4" type="video/mp4" />
+    </video>
+    <br />
+    <button class="close-btn" id="closeVideo">OK fine 😅</button>
   </div>
+</div>
 
+<script>
+const symbols = ['🌸','🌹','🌷','💗','💕','✨','🌺','🩷'];
+const petalsEl = document.getElementById('petals');
+for (let i = 0; i < 28; i++) {
+  const p = document.createElement('div');
+  p.className = 'petal';
+  p.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+  p.style.cssText = `
+    left: ${Math.random() * 100}%;
+    animation-duration: ${4 + Math.random() * 7}s;
+    animation-delay: ${Math.random() * 8}s;
+    font-size: ${14 + Math.random() * 14}px;
+  `;
+  petalsEl.appendChild(p);
+}
 
-  <div class="video-overlay" id="videoOverlay">
-    <div class="video-popup">
-      <p>Stop messing with me! 😡</p>
-      <video id="popupVideo" muted autoplay playsinline loop>
-        <source src="reaction.mp4" type="video/mp4" />
-      </video>
-      <br />
-      <button class="close-btn" id="closeVideo">OK fine 😅</button>
-    </div>
-  </div>
+const noBtn = document.getElementById('btnNo');
+const videoOverlay = document.getElementById('videoOverlay');
+const popupVideo = document.getElementById('popupVideo');
+const closeVideo = document.getElementById('closeVideo');
+let noCount = 0;
 
+function handleNo() {
+  noCount++;
 
-  <script>
-    /* ── Petals ── */
-    const symbols = ['🌸','🌹','🌷','💗','💕','✨','🌺','🩷'];
-    const petalsEl = document.getElementById('petals');
-    for (let i = 0; i < 28; i++) {
-      const p = document.createElement('div');
-      p.className = 'petal';
-      p.textContent = symbols[Math.floor(Math.random() * symbols.length)];
-      p.style.cssText = `
-        left: ${Math.random() * 100}%;
-        animation-duration: ${4 + Math.random() * 7}s;
-        animation-delay: ${Math.random() * 8}s;
-        font-size: ${14 + Math.random() * 14}px;
-      `;
-      petalsEl.appendChild(p);
-    }
+  if (noCount >= 4) {
+    videoOverlay.classList.add('active');
+    popupVideo.muted = true;
+    popupVideo.play();
+    return;
+  }
 
+  noBtn.style.position = 'fixed';
 
-    /* ── No button ── */
-    const noBtn        = document.getElementById('btnNo');
-    const videoOverlay = document.getElementById('videoOverlay');
-    const popupVideo   = document.getElementById('popupVideo');
-    const closeVideo   = document.getElementById('closeVideo');
-    let noCount = 0;
+  const rect = noBtn.getBoundingClientRect();
+  const padding = 15;
 
-    const BTN_W = noBtn.offsetWidth;
-    const BTN_H = noBtn.offsetHeight;
+  const maxX = window.innerWidth - rect.width - padding;
+  const maxY = window.innerHeight - rect.height - padding;
 
+  const x = Math.random() * maxX;
+  const y = Math.random() * maxY;
 
-    function handleNo() {
-      noCount++;
+  noBtn.style.left = x + 'px';
+  noBtn.style.top = y + 'px';
+}
 
+noBtn.addEventListener('mouseenter', handleNo);
+noBtn.addEventListener('touchstart', function(e) {
+  e.preventDefault();
+  handleNo();
+}, { passive: false });
 
-      if (noCount >= 4) {
-        videoOverlay.classList.add('active');
-        popupVideo.muted = true;
-        popupVideo.play();
-        return;
-      }
+closeVideo.addEventListener('click', () => {
+  videoOverlay.classList.remove('active');
+  popupVideo.pause();
+  popupVideo.currentTime = 0;
+  noCount = 0;
 
+  noBtn.style.position = '';
+  noBtn.style.left = '';
+  noBtn.style.top = '';
+});
 
-      // Safe random position — button fully inside the viewport every time
-      const x = Math.random() * (window.innerWidth  - BTN_W);
-      const y = Math.random() * (window.innerHeight - BTN_H);
+const btnYes = document.getElementById('btnYes');
+const yesScreen = document.getElementById('yesScreen');
 
+btnYes.addEventListener('click', () => {
+  for (let i = 0; i < 24; i++) spawnConfetti(btnYes);
+  setTimeout(() => {
+    yesScreen.classList.add('active');
+    document.getElementById('petals').style.zIndex = 51;
+  }, 300);
+});
 
-      noBtn.style.position = 'fixed'; // ✅ fixed instead of absolute
-      noBtn.style.left = x + 'px';
-      noBtn.style.top  = y + 'px';
-    }
-
-
-    noBtn.addEventListener('mouseenter', handleNo);
-    noBtn.addEventListener('touchstart', function(e) {
-      e.preventDefault();
-      handleNo();
-    }, { passive: false });
-
-
-    /* ── Close video ── */
-    closeVideo.addEventListener('click', () => {
-      videoOverlay.classList.remove('active');
-      popupVideo.pause();
-      popupVideo.currentTime = 0;
-      noCount = 0;
-    });
-
-
-    /* ── Yes button ── */
-    const btnYes    = document.getElementById('btnYes');
-    const yesScreen = document.getElementById('yesScreen');
-
-
-    btnYes.addEventListener('click', () => {
-      for (let i = 0; i < 24; i++) spawnConfetti(btnYes);
-      setTimeout(() => {
-        yesScreen.classList.add('active');
-        document.getElementById('petals').style.zIndex = 51;
-      }, 300);
-    });
-
-
-    function spawnConfetti(origin) {
-      const r  = origin.getBoundingClientRect();
-      const cx = r.left + r.width  / 2;
-      const cy = r.top  + r.height / 2;
-      const el = document.createElement('div');
-      el.className   = 'confetti-heart';
-      el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
-      const angle = Math.random() * Math.PI * 2;
-      const dist  = 80 + Math.random() * 140;
-      el.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
-      el.style.setProperty('--dy', Math.sin(angle) * dist + 'px');
-      el.style.left           = cx + 'px';
-      el.style.top            = cy + 'px';
-      el.style.animationDelay = Math.random() * .2 + 's';
-      document.body.appendChild(el);
-      el.addEventListener('animationend', () => el.remove());
-    }
-  </script>
+function spawnConfetti(origin) {
+  const r = origin.getBoundingClientRect();
+  const cx = r.left + r.width / 2;
+  const cy = r.top + r.height / 2;
+  const el = document.createElement('div');
+  el.className = 'confetti-heart';
+  el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+  const angle = Math.random() * Math.PI * 2;
+  const dist = 80 + Math.random() * 140;
+  el.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
+  el.style.setProperty('--dy', Math.sin(angle) * dist + 'px');
+  el.style.left = cx + 'px';
+  el.style.top = cy + 'px';
+  el.style.animationDelay = Math.random() * .2 + 's';
+  document.body.appendChild(el);
+  el.addEventListener('animationend', () => el.remove());
+}
+</script>
 </body>
 </html>
